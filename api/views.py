@@ -78,3 +78,11 @@ def getClient(request,pk):
         return Response(serializer.data)
     except Exception as err :
         return Response({"id":"wrong user id {}".format(err)})
+@api_view(['GET'])
+def getClient(request):
+    
+    client = Client.objects.all()
+
+    serializer = ClientSerializer(client,many=True)
+    return Response(serializer.data)
+    
