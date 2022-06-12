@@ -14,7 +14,7 @@ class User(AbstractUser):
     typeCompte= models.CharField(max_length=100, blank=True, default='client')
     tlf=models.CharField(max_length=100,unique=True)
     is_connected=models.BooleanField(default=False)
-    is_Disp=models.BooleanField(default=True)
+    is_free=models.BooleanField(default=True)
     firebaseID=models.CharField(max_length=100,blank=True,null=True)
     class Meta:
         verbose_name_plural = "1. Add Users"
