@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qlb)qb!4zj*8_fdu_awxjk6vo+s*-_js2596bsicrs^_evt&m@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['restapialilou.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -117,8 +117,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# STATIC_URL = '/static/'
+import os
+STATIC_ROOT= os.path.join(BASE_DIR,'staticfiles'))
 STATIC_URL = '/static/'
-
+import django_heroku
+django_heroku.settings(locals())
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
