@@ -9,7 +9,7 @@ urlpatterns = [
     path('accounts/signup/driver/', views.DriverSignupView.as_view()),#post
     path('accounts/login/'        , views.CustomAuthToken.as_view()),#post
     path('accounts/logout/'       , views.LogoutView.as_view()),#post
-    path('clients/'          ,views.getClient),
+    path('clients/'               ,views.getClient),
     path('clients/<pk>/'          ,views.getClient)
    
 ]
