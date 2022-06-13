@@ -30,6 +30,24 @@ class ClientSerializer(serializers.ModelSerializer):
         staff_instance.save()
         return staff_instance
 
+class DriverSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+    #typeuser_name = serializers.RelatedField(source='typeUser', read_only=True)
+
+    class Meta:
+        model=Driver
+        fields = "__all__"
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_instance = User.objects.create(
+            username=user_data['username'],email=user_data['email'], password=user_data['password'])
+        user_instance.save()
+        
+        staff_instance = Client.objects.create(
+            **validated_data, user=user_instance)
+        staff_instance.save()
+        return staff_instance
+
 
 class ClientSignupSerializer(serializers.ModelSerializer):
     typeuser=serializers.CharField(style={"input_type":"select"}   , write_only=True)

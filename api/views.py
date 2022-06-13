@@ -75,12 +75,12 @@ def getClient(request,pk):
     try:
         if not pk.startswith("0"):
             client = Client.objects.get(id=pk)
-            serializer = ClientSerializer(client,many=False)
+            serializer = DriverSerializer(client,many=False)
             return Response(serializer.data)
         elif  pk.startswith("0") :
             user=User.objects.get(username=pk)
             client = Client.objects.get(user=user.id)
-            serializer = ClientSerializer(client,many=False)
+            serializer = DriverSerializer(client,many=False)
             return Response(serializer.data)
     except Client.DoesNotExist as err:        
         print(err)
@@ -89,6 +89,29 @@ def getClient(request,pk):
 def getClients(request):
     client = Client.objects.all()
 
-    serializer = ClientSerializer(client,many=True)
+    serializer = DriverSerializer(client,many=True)
     return Response(serializer.data)
+ 
+
+@api_view(['GET'])
+def getDriver(request,pk):
     
+    try:
+        if not pk.startswith("0"):
+            driver = Driver.objects.get(id=pk)
+            serializer = DriverSerializer(driver,many=False)
+            return Response(serializer.data)
+        elif  pk.startswith("0") :
+            user=User.objects.get(username=pk)
+            driver = Driver.objects.get(user=user.id)
+            serializer = DriverSerializer(driver,many=False)
+            return Response(serializer.data)
+    except Driver.DoesNotExist as err:        
+        print(err)
+        return Response({"err":" {}".format(err)})
+@api_view(['GET'])
+def getDrivers(request):
+    client = Driver.objects.all()
+
+    serializer = DriverSerializer(client,many=True)
+    return Response(serializer.data)
