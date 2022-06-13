@@ -76,10 +76,16 @@ def getClient(request,pk):
 
         serializer = ClientSerializer(client,many=False)
         return Response(serializer.data)
-    except Exception as err :
+    except Client.DoesNotExist :
+        user=User.objects.get(username=pk)
+        client = Client.objects.get(user=user.id)
+
+        serializer = ClientSerializer(client,many=False)
+        return Response(serializer.data)
+    except Exception:
         return Response({"id":"wrong user id {}".format(err)})
 @api_view(['GET'])
-def getClient(request):
+def getClients(request):
     
     client = Client.objects.all()
 
