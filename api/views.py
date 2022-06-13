@@ -71,19 +71,19 @@ class LogoutView(APIView):
 
 @api_view(['GET'])
 def getClient(request,pk):
-    try:
+    if not pk.startswith("0")
         client = Client.objects.get(id=pk)
 
         serializer = ClientSerializer(client,many=False)
         return Response(serializer.data)
-    except Client.DoesNotExist :
+    elif  pk.startswith("0") :
         user=User.objects.get(username=pk)
         client = Client.objects.get(user=user.id)
 
         serializer = ClientSerializer(client,many=False)
         return Response(serializer.data)
-    except Exception:
-        return Response({"id":"wrong user id {}".format(err)})
+    else:
+        return Response({"id":"wrong user id/phone number {}".format(err)})
 @api_view(['GET'])
 def getClients(request):
     
