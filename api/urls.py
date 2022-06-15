@@ -18,5 +18,5 @@ urlpatterns = [
     path('drivers/<pk>/activate'  ,views.activateDriver)
 ]   
 
-
-#urlpatterns = format_suffix_patterns(urlpatterns)
+#real time notifcations 
+#https://medium.com/geekculture/add-real-time-notifications-to-your-django-project-6ee2aed38597
