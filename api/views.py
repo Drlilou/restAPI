@@ -93,21 +93,17 @@ def getClients(request):
     return Response(serializer.data)
  
 
-@api_view(['GET'])
-def getDriver(request,pk):
+@api_view(['PUT'])
+def activateDriver(request,pk):
     
     try:
-        if not pk.startswith("0"):
             driver = Driver.objects.get(id=pk)
-            serializer = DriverSerializer(driver,many=False)
-            return Response(serializer.data)
-        elif  pk.startswith("0") :
-            user=User.objects.get(username=pk)
-            driver = Driver.objects.get(user=user.id)
+            user=User.objects.get(id=driver.user_id)
+            user.is_active=1
+            user.save()
             serializer = DriverSerializer(driver,many=False)
             return Response(serializer.data)
     except Driver.DoesNotExist as err:        
-        print(err)
         return Response({"err":" {}".format(err)})
 @api_view(['GET'])
 def getDrivers(request):

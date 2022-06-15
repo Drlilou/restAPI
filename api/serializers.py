@@ -88,7 +88,8 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         user=User(
             username=self.validated_data['tlf'],
             email=self.validated_data['tlf'],
-            tlf=self.validated_data['tlf']
+            tlf=self.validated_data['tlf'],
+            is_active=0
 
         )
         password=self.validated_data['password']
