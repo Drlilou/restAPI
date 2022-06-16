@@ -48,7 +48,11 @@ class DriverSerializer(serializers.ModelSerializer):
         staff_instance.save()
         return staff_instance
 
-
+class AmiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Amite
+        fields='__all__'
+    
 class ClientSignupSerializer(serializers.ModelSerializer):
     typeuser=serializers.CharField(style={"input_type":"select"}   , write_only=True)
     password2=serializers.CharField(style={"input_type":"password"}, write_only=True)

@@ -85,6 +85,62 @@ def getClient(request,pk):
     except Client.DoesNotExist as err:        
         print(err)
         return Response({"err":" {}".format(err)})
+
+
+@api_view(['GET'])
+def getClientFav(request,pk):
+    
+    try:
+        #print([field.name for field in Amite._meta.get_fields()] )
+        client =Client.objects.get(id=pk)
+        amite = Amite.objects.filter(id_client=pk)
+
+        serializer = AmiteSerializer(amite,many=True)
+        return Response(serializer.data)
+    except Client.DoesNotExist as err:  
+            return Response({"err":" client do est exist ({})".format(err)})
+    except Amite.DoesNotExist as err:        
+        print(err)
+        return Response({"err":" {}".format(err)})
+
+@api_view(['POST','DELETE'])
+def addClientFav(request):
+    id_client=request.data['id_client']
+    id_driver=request.data['id_driver']
+    try:
+            id_client=int(id_client)
+            id_driver=int(id_driver)
+    except Exception:
+            return Response({"err":"id format is not correct(must be integer) "})
+    try:
+            client=Client.objects.get(id=id_client)
+
+    except Client.DoesNotExist as e:
+            return Response({"err":" {}".format(e)})
+    try:
+            driver=Driver.objects.get(id=id_driver)
+
+    except Driver.DoesNotExist as e:
+            return Response({"err":" {}".format(e)})
+
+    if request.method == "POST": 
+        
+        amite=Amite.objects.filter(id_client=id_client,id_driver=id_driver)
+        if amite:
+            return Response({"err":" deja ami "})
+        else:
+            amite=Amite(id_client=client,id_driver=driver)
+            amite.save()
+        return Response({"succes":"  we add rthis relation:D "})
+    elif  request.method == "DELETE": 
+        amite=Amite.objects.filter(id_client=id_client,id_driver=id_driver)
+        if not  amite:
+            return Response({"err":" ne sont pas des  ami "})
+        else:
+            amite=Amite.objects.get(id_client=client,id_driver=driver)
+            amite.delete()
+        return Response({"succes":"  we add rthis relation:D "})
+        
 @api_view(['GET'])
 def getClients(request):
     client = Client.objects.all()

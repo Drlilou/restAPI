@@ -11,7 +11,10 @@ urlpatterns = [
     path('accounts/logout/'       , views.LogoutView.as_view()),#post
     #clients
     path('clients/'               ,views.getClients),
-    path('clients/<pk>/'          ,views.getClient),
+    path('clients/<pk>/'          ,views.getClient),#
+    path('clients/fav/<pk>/'      ,views.getClientFav),
+    path('client/addClientFav/'  ,views.addandDeleteClientFav),
+
     #driver
     path('drivers/'               ,views.getDrivers),
     path('drivers/<pk>/'          ,views.getDrivers),
