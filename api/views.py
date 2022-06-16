@@ -95,6 +95,7 @@ def getClientFav(request,pk):
         client =Client.objects.get(id=pk)
         amite = Amite.objects.filter(id_client=pk)
 
+
         serializer = AmiteSerializer(amite,many=True)
         return Response(serializer.data)
     except Client.DoesNotExist as err:  

@@ -43,15 +43,18 @@ class DriverSerializer(serializers.ModelSerializer):
             username=user_data['username'],email=user_data['email'], password=user_data['password'])
         user_instance.save()
         
-        staff_instance = Client.objects.create(
+        staff_instance = Driver.objects.create(
             **validated_data, user=user_instance)
         staff_instance.save()
         return staff_instance
 
 class AmiteSerializer(serializers.ModelSerializer):
+    #clientSerializer=ClientSerializer(read_only=True)
+    driverSerializer=DriverSerializer(read_only=True)
     class Meta:
         model=Amite
-        fields='__all__'
+        fields='__all__'#['driverSerializer',]
+
     
 class ClientSignupSerializer(serializers.ModelSerializer):
     typeuser=serializers.CharField(style={"input_type":"select"}   , write_only=True)
