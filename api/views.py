@@ -104,7 +104,7 @@ def getClientFav(request,pk):
         return Response({"err":" {}".format(err)})
 
 @api_view(['POST','DELETE'])
-def addClientFav(request):
+def addandDeleteClientFav(request):
     id_client=request.data['id_client']
     id_driver=request.data['id_driver']
     try:

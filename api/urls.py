@@ -13,7 +13,7 @@ urlpatterns = [
     path('clients/'               ,views.getClients),
     path('clients/<pk>/'          ,views.getClient),#
     path('clients/fav/<pk>/'      ,views.getClientFav),
-    path('client/addClientFav/'  ,views.addandDeleteClientFav),
+    path('client/addClientFav/'   ,views.addandDeleteClientFav),
 
     #driver
     path('drivers/'               ,views.getDrivers),
