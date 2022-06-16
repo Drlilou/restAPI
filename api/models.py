@@ -39,13 +39,13 @@ class Driver(models.Model):
 
 
 class Amite(models.Model):
-    id_client = models.OneToOneField('Client', models.DO_NOTHING, db_column='id_client')
-    id_driver = models.OneToOneField('Driver', models.DO_NOTHING, db_column='id_driver')
+    id_client = models.ForeignKey('Client', models.DO_NOTHING, db_column='id_client')
+    id_driver = models.ForeignKey('Driver', models.DO_NOTHING, db_column='id_driver')
 
     class Meta:
         managed = managed
         db_table = 'amite'
-        unique_together = (('id_client', 'id_driver'),)
+        #unique_together = (('id_client', 'id_driver'),)
 
 
 

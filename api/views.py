@@ -93,10 +93,13 @@ def getClientFav(request,pk):
     try:
         #print([field.name for field in Amite._meta.get_fields()] )
         client =Client.objects.get(id=pk)
-        amite = Amite.objects.filter(id_client=pk)
-
-
-        serializer = AmiteSerializer(amite,many=True)
+        amites = Amite.objects.filter(id_client=pk)
+        drivers=[]
+        for amite in amites:
+            drivers.append(amite.id_driver)
+        if len(drivers)==0:
+            return Response({"drivers":"no drivers yets"})
+        serializer = DriverSerializer(drivers,many=True)
         return Response(serializer.data)
     except Client.DoesNotExist as err:  
             return Response({"err":" client do est exist ({})".format(err)})
