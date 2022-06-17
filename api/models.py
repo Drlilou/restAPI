@@ -17,13 +17,13 @@ class User(AbstractUser):
     is_free=models.BooleanField(default=True)
     firebaseID=models.CharField(max_length=100,blank=True,null=True)
     class Meta:
-        verbose_name_plural = "1. Add Users"
+        verbose_name_plural = '1. Add Users'
     def __str__(self):
         return self.username
 
 class Client(models.Model):
-    user=models.OneToOneField(User, related_name="client", on_delete=models.CASCADE)
-    typeuser = models.ForeignKey('Typeuser', models.DO_NOTHING, db_column='typeUser', blank=True, null=True)  # Field name made lowercase.
+    user=models.OneToOneField(User, related_name='client', on_delete=models.CASCADE)
+    typeclient = models.CharField(max_length=200,default='sîmple')  # Field name made lowercase.
     #client_tlf = models.CharField(max_length=100, blank=True, null=True)
     class Meta:
         managed = managed
@@ -31,7 +31,7 @@ class Client(models.Model):
  
 
 class Driver(models.Model):
-    user=models.OneToOneField(User, related_name="driver",on_delete=models.CASCADE)
+    user=models.OneToOneField(User, related_name='driver',on_delete=models.CASCADE)
     #driver_tlf = models.CharField(max_length=100, blank=True, null=True)
     class Meta:
         managed = managed
@@ -61,9 +61,9 @@ class Category(models.Model):
 class Coursa(models.Model):
     date_dapart = models.DateField(blank=True, null=True)
     date_arrive = models.DateField(blank=True, null=True)
-    arrive = models.ForeignKey('Point', models.DO_NOTHING, db_column='arrive',related_name="arrive", blank=True, null=True)
+    arrive = models.ForeignKey('Point', models.DO_NOTHING, db_column='arrive',related_name='arrive', blank=True, null=True)
     client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client', blank=True, null=True)
-    depart = models.ForeignKey('Point', models.DO_NOTHING, db_column='depart',related_name="depart", blank=True, null=True)
+    depart = models.ForeignKey('Point', models.DO_NOTHING, db_column='depart',related_name='depart', blank=True, null=True)
     voiture = models.ForeignKey('Voiture', models.DO_NOTHING, db_column='voiture', blank=True, null=True)
 
     class Meta:
@@ -122,12 +122,6 @@ class Tracking(models.Model):
         unique_together = (('coursa', 'point'),)
 
 
-class Typeuser(models.Model):
-    type_user = models.CharField(max_length=200, blank=True, null=True)
-
-    class Meta:
-        managed = managed
-        db_table = 'typeuser'
 
 
 class Voiture(models.Model):
