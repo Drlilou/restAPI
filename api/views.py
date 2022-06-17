@@ -31,6 +31,7 @@ class DriverSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
         driver = Driver.objects.get(user_id=user.pk)
+        print(driver)
         serializer=DriverSerializer(driver,many=False)
         return Response(
             serializer.data
@@ -41,7 +42,7 @@ class DriverSignupView(generics.GenericAPIView):
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer=self.serializer_class(data=request.data, context={'request':request})
-       
+        print(serializer)
         serializer.is_valid(raise_exception=True)
 
         user=serializer.validated_data['user']

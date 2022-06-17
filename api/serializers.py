@@ -4,6 +4,7 @@ from .models import *
 
 
 # signup login logout
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
@@ -29,8 +30,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class DriverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
-    #typeuser_name = serializers.RelatedField(source='typeUser', read_only=True)
-
     class Meta:
         model=Driver
         fields = '__all__'
@@ -97,8 +96,8 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         user=User(
             username=self.validated_data['tlf'],
             email=self.validated_data['tlf'],
-            tlf=self.validated_data['tlf'],
-            is_active=0
+            tlf=self.validated_data['tlf']
+            #, is_active=0
 
         )
         password=self.validated_data['password']
@@ -109,4 +108,5 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         user.typeCompte='driver'
         user.save()
         Driver.objects.create(user=user)
+        
         return user
