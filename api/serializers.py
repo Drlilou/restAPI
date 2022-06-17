@@ -76,6 +76,8 @@ class ClientSignupSerializer(serializers.ModelSerializer):
         typeclient=self.validated_data['typeclient']
         if password !=password2:
             raise serializers.ValidationError({'error':'password do not match'})
+        if typeclient not in ['pro','simple']:
+            raise serializers.ValidationError({"error":"wrong client type, choose wisely"})
         user.set_password(password)
         user.typeCompte='client'
         user.save()
