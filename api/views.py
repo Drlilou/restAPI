@@ -45,15 +45,14 @@ class CustomAuthToken(ObtainAuthToken):
         user.save()
         #token, created=Token.objects.get_or_create(user=user)
         print(user)
-        return Response({
-            #'token':token.key,
-            'user_id':user.pk,
-            'typeCompte':user.typeCompte,
-            'connection':user.is_connected,
-            'firebaseID':user.firebaseID
-
-        })
-
+        if user.typeCompte=="Driver":
+            ser=DriverSerializer(Driver.objects.get(user_id=user.id),many=False)
+            
+        else:
+            
+            ser=    ClientSerializer(Client.objects.get(user_id=user.id),many=False)
+        import json    
+        return Response(ser.data)
 class LogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
