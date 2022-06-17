@@ -31,7 +31,7 @@ class DriverSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
         driver = Driver.objects.get(user_id=user.pk)
-        serializer=DriverSerializer(client,many=False)
+        serializer=DriverSerializer(driver,many=False)
         return Response(
             serializer.data
             #'user':UserSerializer(user, context=self.get_serializer_context()).data,
