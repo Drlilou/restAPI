@@ -170,3 +170,9 @@ def getDrivers(request):
 
     serializer = DriverSerializer(client,many=True)
     return Response(serializer.data)
+@api_view(['GET'])
+def getDriver(request,pk):
+    client = Driver.objects.get(id=pk)
+
+    serializer = DriverSerializer(client,many=True)
+    return Response(serializer.data)
