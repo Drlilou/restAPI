@@ -174,5 +174,5 @@ def getDrivers(request):
 def getDriver(request,pk):
     client = Driver.objects.get(id=pk)
 
-    serializer = DriverSerializer(client,many=True)
+    serializer = DriverSerializer(client,many=False)
     return Response(serializer.data)

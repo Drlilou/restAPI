@@ -17,7 +17,7 @@ urlpatterns = [
 
     #driver
     path('drivers/'               ,views.getDrivers),
-    path('drivers/<pk>/'          ,views.getDrivers),
+    path('drivers/<pk>/'          ,views.getDriver),
     path('drivers/<pk>/activate'  ,views.activateDriver)
 ]   
 
