@@ -45,7 +45,7 @@ class CustomAuthToken(ObtainAuthToken):
         user.save()
         #token, created=Token.objects.get_or_create(user=user)
         print(user)
-        if user.typeCompte=="Driver":
+        if user.typeCompte=="driver":
             ser=DriverSerializer(Driver.objects.get(user_id=user.id),many=False)
             
         else:
