@@ -64,7 +64,7 @@ class CustomAuthToken(ObtainAuthToken):
                             "last_name":  driver.user.last_name,
                             #"email":      driver.user.email,
                             "typeCompte": driver.user.typeCompte,
-                            "firebaseID": driver.firebaseID,
+                            "firebaseID": driver.user.firebaseID,
                              
                             })    
         else:
@@ -227,6 +227,6 @@ def getDriver(request,pk):
                             "last_name":  driver.user.last_name,
                             #"email":      driver.user.email,
                             "typeCompte": driver.user.typeCompte,
-                            "firebaseID": driver.firebaseID,
+                            "firebaseID": driver.user.firebaseID,
                              
                             })
