@@ -46,7 +46,10 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
 
         user=serializer.validated_data['user']
-        
+        if 'firebaseID' not in request.data:
+             return Response({"error":"firebaseID is not definned"
+                             
+                            }) 
         user.firebaseID=request.data['firebaseID']
         user.is_connected=True
         user.save()
