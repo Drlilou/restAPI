@@ -67,7 +67,8 @@ class CustomAuthToken(ObtainAuthToken):
         else:
             client=Client.objects.get(user_id=user.id)
             #ser=    ClientSerializer(client,many=False)
-            return Response({"id":client.id , 
+            return Response({
+                            "id":client.id , 
                             "username": client.user.username,
                             "first_name": client.user.first_name,
                             "last_name": client.user.last_name,
@@ -98,13 +99,31 @@ def getClient(request,pk):
     try:
         if not pk.startswith('0'):
             client = Client.objects.get(id=pk)
-            serializer = DriverSerializer(client,many=False)
-            return Response(serializer.data)
+            #serializer = DriverSerializer(client,many=False)
+            return Response({
+                            "id":client.id , 
+                            "username": client.user.username,
+                            "first_name": client.user.first_name,
+                            "last_name": client.user.last_name,
+                            #"email": client.user.email,
+                            "typeCompte": client.user.typeCompte,
+                            "firebaseID": client.user.firebaseID,
+                             "typeclient": client.typeclient
+                            })
         elif  pk.startswith('0') :
             user=User.objects.get(username=pk)
             client = Client.objects.get(user=user.id)
-            serializer = DriverSerializer(client,many=False)
-            return Response(serializer.data)
+            #serializer = DriverSerializer(client,many=False)
+            return Response({
+                            "id":client.id , 
+                            "username": client.user.username,
+                            "first_name": client.user.first_name,
+                            "last_name": client.user.last_name,
+                            #"email": client.user.email,
+                            "typeCompte": client.user.typeCompte,
+                            "firebaseID": client.user.firebaseID,
+                             "typeclient": client.typeclient
+                            })
     except Client.DoesNotExist as err:        
         print(err)
         return Response({'err':' {}'.format(err)})
@@ -172,7 +191,7 @@ def addandDeleteClientFav(request):
 def getClients(request):
     client = Client.objects.all()
 
-    serializer = DriverSerializer(client,many=True)
+    serializer = ClientSerializer(client,many=True)
     return Response(serializer.data)
  
 
@@ -196,7 +215,15 @@ def getDrivers(request):
     return Response(serializer.data)
 @api_view(['GET'])
 def getDriver(request,pk):
-    client = Driver.objects.get(id=pk)
+    driver = Driver.objects.get(id=pk)
 
     serializer = DriverSerializer(client,many=False)
-    return Response(serializer.data)
+    return Response({"id":driver.id , 
+                            "username":  driver.user.username,
+                            "first_name": driver.user.first_name,
+                            "last_name":  driver.user.last_name,
+                            #"email":      driver.user.email,
+                            "typeCompte": driver.user.typeCompte,
+                            "firebaseID": driver.firebaseID,
+                             
+                            })
