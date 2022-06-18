@@ -42,7 +42,7 @@ class DriverSignupView(generics.GenericAPIView):
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer=self.serializer_class(data=request.data, context={'request':request})
-        print(serializer)
+        
         serializer.is_valid(raise_exception=True)
 
         user=serializer.validated_data['user']
@@ -51,15 +51,32 @@ class CustomAuthToken(ObtainAuthToken):
         user.is_connected=True
         user.save()
         #token, created=Token.objects.get_or_create(user=user)
-        print(user)
+        
         if user.typeCompte=='driver':
-            ser=    DriverSerializer(Driver.objects.get(user_id=user.id),many=False)
-            
+            driver =Driver.objects.get(user_id=user.id)
+            #ser=    DriverSerializer(,many=False)
+            return Response({"id":driver.id , 
+                            "username":  driver.user.username,
+                            "first_name": driver.user.first_name,
+                            "last_name":  driver.user.last_name,
+                            #"email":      driver.user.email,
+                            "typeCompte": driver.user.typeCompte,
+                            "firebaseID": driver.firebaseID,
+                             
+                            })    
         else:
-            
-            ser=    ClientSerializer(Client.objects.get(user_id=user.id),many=False)
-        import json    
-        return Response(ser.data)
+            client=Client.objects.get(user_id=user.id)
+            #ser=    ClientSerializer(client,many=False)
+            return Response({"id":client.id , 
+                            "username": client.user.username,
+                            "first_name": client.user.first_name,
+                            "last_name": client.user.last_name,
+                            #"email": client.user.email,
+                            "typeCompte": client.user.typeCompte,
+                            "firebaseID": client.user.firebaseID,
+                             "typeclient": client.typeclient
+                            })           
+        
 class LogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
