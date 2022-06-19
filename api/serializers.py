@@ -32,7 +32,7 @@ class DriverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
     class Meta:
         model=Driver
-        fields = '__all__'
+        fields = ['id','user']#,'user']
     
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -110,6 +110,9 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         Driver.objects.create(user=user)
         
         return user
+
+def driversTodict(drivers):
+    return set([driverTodict(driver) for driver in drivers])
 def driverTodict(driver):
     return {                "id":driver.id , 
                             "username":  driver.user.username,
@@ -122,3 +125,15 @@ def driverTodict(driver):
                              "alt":driver.user.point_actuelle.alt,
                             
     }
+def clientTodict(client):
+    return {                "id":client.id , 
+                            "username": client.user.username,
+                            "first_name": client.user.first_name,
+                            "last_name": client.user.last_name,
+                            #"email": client.user.email,
+                            "typeCompte": client.user.typeCompte,
+                            "firebaseID": client.user.firebaseID,
+                            "typeclient": client.typeclient,
+                            "log":client.user.point_actuelle.log,
+                            "alt":client.user.point_actuelle.alt,
+                            }

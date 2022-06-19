@@ -31,8 +31,8 @@ class DriverSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
         driver = Driver.objects.get(user_id=user.pk)
-        print(driver)
-        serializer=DriverSerializer(driver,many=False)
+        #print(driver)
+        #serializer=DriverSerializer(driver,many=False)
         return Response(
             serializer.data
             #'user':UserSerializer(user, context=self.get_serializer_context()).data,
@@ -75,18 +75,7 @@ class CustomAuthToken(ObtainAuthToken):
         else:
             client=Client.objects.get(user_id=user.id)
             #ser=    ClientSerializer(client,many=False)
-            return Response({
-                            "id":client.id , 
-                            "username": client.user.username,
-                            "first_name": client.user.first_name,
-                            "last_name": client.user.last_name,
-                            #"email": client.user.email,
-                            "typeCompte": client.user.typeCompte,
-                            "firebaseID": client.user.firebaseID,
-                            "typeclient": client.typeclient,
-                            "log":client.point_actuelle.log,
-                            "alt":client.point_actuelle.alt,
-                            })           
+            return Response(clientTodict(client))           
 
 class LogoutView(APIView):
     def post(self, request, format=None):
@@ -111,30 +100,12 @@ def getClient(request,pk):
         if not pk.startswith('0'):
             client = Client.objects.get(id=pk)
             #serializer = DriverSerializer(client,many=False)
-            return Response({
-                            "id":client.id , 
-                            "username": client.user.username,
-                            "first_name": client.user.first_name,
-                            "last_name": client.user.last_name,
-                            #"email": client.user.email,
-                            "typeCompte": client.user.typeCompte,
-                            "firebaseID": client.user.firebaseID,
-                             "typeclient": client.typeclient
-                            })
+            return Response(clientTodict(client))
         elif  pk.startswith('0') :
             user=User.objects.get(username=pk)
             client = Client.objects.get(user=user.id)
             #serializer = DriverSerializer(client,many=False)
-            return Response({
-                            "id":client.id , 
-                            "username": client.user.username,
-                            "first_name": client.user.first_name,
-                            "last_name": client.user.last_name,
-                            #"email": client.user.email,
-                            "typeCompte": client.user.typeCompte,
-                            "firebaseID": client.user.firebaseID,
-                             "typeclient": client.typeclient
-                            })
+            return Response(clientTodict(client))
     except Client.DoesNotExist as err:        
         print(err)
         return Response({'err':' {}'.format(err)})
@@ -253,16 +224,7 @@ def updatePlacemntDriver(request):
         
             user.save()
             #serializer = DriverSerializer(driver,many=False)
-            return Response({"id":driver.id , 
-                            "username":  driver.user.username,
-                            "first_name": driver.user.first_name,
-                            "last_name":  driver.user.last_name,
-                            #"email":      driver.user.email,
-                            "typeCompte": driver.user.typeCompte,
-                            "firebaseID": driver.user.firebaseID,
-                             "log":driver.user.point_actuelle.log,
-                             "alt":driver.user.point_actuelle.alt,
-                            })
+            return Response(clientTodict(client))
     except Driver.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
@@ -284,18 +246,7 @@ def updatePlacemntClient(request):
         
             user.save()
             #serializer = DriverSerializer(driver,many=False)
-            return Response({
-                            "id":client.id , 
-                            "username": client.user.username,
-                            "first_name": client.user.first_name,
-                            "last_name": client.user.last_name,
-                            #"email": client.user.email,
-                            "typeCompte": client.user.typeCompte,
-                            "firebaseID": client.user.firebaseID,
-                            "typeclient": client.typeclient,
-                            "log":client.user.point_actuelle.log,
-                            "alt":client.user.point_actuelle.alt,
-                            })
+            return Response(clientTodict(client))
     except Client.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
