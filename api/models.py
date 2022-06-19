@@ -17,6 +17,7 @@ class Point(models.Model):
     class Meta:
         managed = managed
         db_table = 'point'
+
 class User(AbstractUser):
     typeCompte= models.CharField(max_length=100, blank=True, default='client')
     tlf=models.CharField(max_length=100,unique=True)

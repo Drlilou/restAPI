@@ -110,3 +110,15 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         Driver.objects.create(user=user)
         
         return user
+def driverTodict(driver):
+    return {                "id":driver.id , 
+                            "username":  driver.user.username,
+                            "first_name": driver.user.first_name,
+                            "last_name":  driver.user.last_name,
+                            #"email":      driver.user.email,
+                            "typeCompte": driver.user.typeCompte,
+                            "firebaseID": driver.user.firebaseID,
+                             "log":driver.user.point_actuelle.log,
+                             "alt":driver.user.point_actuelle.alt,
+                            
+    }

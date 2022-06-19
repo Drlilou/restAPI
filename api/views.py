@@ -71,16 +71,7 @@ class CustomAuthToken(ObtainAuthToken):
         if user.typeCompte=='driver':
             driver =Driver.objects.get(user_id=user.id)
             #ser=    DriverSerializer(,many=False)
-            return Response({"id":driver.id , 
-                            "username":  driver.user.username,
-                            "first_name": driver.user.first_name,
-                            "last_name":  driver.user.last_name,
-                            #"email":      driver.user.email,
-                            "typeCompte": driver.user.typeCompte,
-                            "firebaseID": driver.user.firebaseID,
-                             "log":driver.point_actuelle.log,
-                             "alt":driver.point_actuelle.alt,
-                            })    
+            return Response(driverTodict(driver))    
         else:
             client=Client.objects.get(user_id=user.id)
             #ser=    ClientSerializer(client,many=False)
@@ -107,6 +98,7 @@ class LogoutView(APIView):
         user=serializer.validated_data['user']
         
         user.firebaseID=''
+
         user.is_connected=False
         user.save()
         
@@ -238,16 +230,8 @@ def getDrivers(request):
 def getDriver(request,pk):
     driver = Driver.objects.get(id=pk)
 
-    serializer = DriverSerializer(client,many=False)
-    return Response({"id":driver.id , 
-                            "username":  driver.user.username,
-                            "first_name": driver.user.first_name,
-                            "last_name":  driver.user.last_name,
-                            #"email":      driver.user.email,
-                            "typeCompte": driver.user.typeCompte,
-                            "firebaseID": driver.user.firebaseID,
-                             
-                            })
+    serializer = DriverSerializer(driver,many=False)
+    return Response(driverTodict(driver))
 
 
 #--------------------------------------------------
@@ -314,3 +298,38 @@ def updatePlacemntClient(request):
                             })
     except Client.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
+
+@api_view(['GET'])
+def getNearsetDriver(request,nbr=20):
+    pk=request.data['id']
+    client = Client.objects.get(id=pk)
+    user=User.objects.get(id=client.user_id)
+    if "nbr" in request.data:
+        nbr=request.data['nbr']
+    #point=Point.objects.get(la=user.point_actuelle)
+    #The location of your user.
+    lat, lng = user.point_actuelle.alt,user.point_actuelle.log,
+
+    min_lat = lat - 1 # You have to calculate this offsets based on the user location.
+    max_lat = lat + 1 # Because the distance of one degree varies over the planet.
+    min_log = lng - 1
+    max_log = lng + 1    
+    users = User.objects.filter(is_connected=1,typeCompte="driver",point_actuelle__alt__gt=min_lat, point_actuelle__alt__lt=max_lat, point_actuelle__log__gt=min_log, point_actuelle__log__lt=max_log)
+    results = []
+    #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
+    from geopy import distance  
+    results = []
+    for user in users:
+        d = distance.distance((lat, lng), (user.point_actuelle.alt, user.point_actuelle.log))
+        results.append( {'distance':d, 'user':user })
+        results = sorted(results, key=lambda k: k['distance'])
+    results = results[:nbr]
+    print(len(results),",,,,,,,,,,,,")
+    results=[r['user'] for r in results]
+    #drivers=[Driver.objects.get()]
+    users=UserSerializer(results,many=True)
+    driver=Driver.objects.get(user_id=results[-1].id)
+    #return Response({"dirver":driver.id})
+    #driver=Driver.objects.get(user_id=1)
+    #driver=DriverSerializer(driver,many=False)
+    return Response(driverTodict(driver))

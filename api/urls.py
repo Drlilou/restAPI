@@ -14,7 +14,9 @@ urlpatterns = [
     path('clients/<pk>/'          ,views.getClient),#
     path('clients/fav/<pk>/'      ,views.getClientFav),
     path('client/addClientFav/'   ,views.addandDeleteClientFav),
-    path('clients/updatePlamcent',views.updatePlacemntClient),
+    path('clients/updatePlamcent' ,views.updatePlacemntClient),
+    path('clients/nearest'        ,views.getNearsetDriver),
+    
     #driver
     path('drivers/'               ,views.getDrivers),
     path('drivers/<pk>/'          ,views.getDriver),
