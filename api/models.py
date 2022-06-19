@@ -10,12 +10,20 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 managed=True
+class Point(models.Model):
+    alt = models.FloatField()
+    log = models.FloatField()
+
+    class Meta:
+        managed = managed
+        db_table = 'point'
 class User(AbstractUser):
     typeCompte= models.CharField(max_length=100, blank=True, default='client')
     tlf=models.CharField(max_length=100,unique=True)
     is_connected=models.BooleanField(default=False)
     is_free=models.BooleanField(default=True)
     firebaseID=models.CharField(max_length=100,blank=True,null=True)
+    point_actuelle = models.ForeignKey(Point, models.DO_NOTHING, null=True,db_column='point')
     class Meta:
         verbose_name_plural = '1. Add Users'
     def __str__(self):
@@ -103,13 +111,7 @@ class Model(models.Model):
         db_table = 'model'
 
 
-class Point(models.Model):
-    alt = models.FloatField()
-    long = models.FloatField()
 
-    class Meta:
-        managed = managed
-        db_table = 'point'
 
 
 class Tracking(models.Model):

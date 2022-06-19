@@ -14,11 +14,12 @@ urlpatterns = [
     path('clients/<pk>/'          ,views.getClient),#
     path('clients/fav/<pk>/'      ,views.getClientFav),
     path('client/addClientFav/'   ,views.addandDeleteClientFav),
-
+    path('clients/updatePlamcent',views.updatePlacemntClient),
     #driver
     path('drivers/'               ,views.getDrivers),
     path('drivers/<pk>/'          ,views.getDriver),
-    path('drivers/<pk>/activate'  ,views.activateDriver)
+    path('drivers/<pk>/activate'  ,views.activateDriver),
+    path('drivers/updatePlamcent' ,views.updatePlacemntDriver)
 ]   
 
 #real time notifcations 

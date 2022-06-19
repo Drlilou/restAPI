@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from .models import Client,User
+from .models import *
 # Create your views here.
 
 class ClientSignupView(generics.GenericAPIView):
@@ -50,6 +50,19 @@ class CustomAuthToken(ObtainAuthToken):
              return Response({"error":"firebaseID is not definned"
                              
                             }) 
+        if 'alt' not in request.data or 'long' not in request.data:
+             return Response({"error":"activate GPS ( alt and log are  not definned)"
+                             
+                            }) 
+       
+        alt=request.data['alt']
+        log=request.data['long']
+        point=Point(alt=alt,log=log)
+        nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
+        if nbrofPoint==0:
+            point.save()
+        point=Point.objects.get(alt=alt,log=log)
+        user.point_actuelle=point
         user.firebaseID=request.data['firebaseID']
         user.is_connected=True
         user.save()
@@ -65,7 +78,8 @@ class CustomAuthToken(ObtainAuthToken):
                             #"email":      driver.user.email,
                             "typeCompte": driver.user.typeCompte,
                             "firebaseID": driver.user.firebaseID,
-                             
+                             "log":driver.point_actuelle.log,
+                             "alt":driver.point_actuelle.alt,
                             })    
         else:
             client=Client.objects.get(user_id=user.id)
@@ -78,9 +92,11 @@ class CustomAuthToken(ObtainAuthToken):
                             #"email": client.user.email,
                             "typeCompte": client.user.typeCompte,
                             "firebaseID": client.user.firebaseID,
-                             "typeclient": client.typeclient
+                            "typeclient": client.typeclient,
+                            "log":client.point_actuelle.log,
+                            "alt":client.point_actuelle.alt,
                             })           
-        
+
 class LogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
@@ -210,6 +226,8 @@ def activateDriver(request,pk):
             return Response(serializer.data)
     except Driver.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
+
+
 @api_view(['GET'])
 def getDrivers(request):
     client = Driver.objects.all()
@@ -230,3 +248,69 @@ def getDriver(request,pk):
                             "firebaseID": driver.user.firebaseID,
                              
                             })
+
+
+#--------------------------------------------------
+@api_view(['PUT'])
+def updatePlacemntDriver(request):
+    
+    try:
+            pk=request.data['id']
+            driver = Driver.objects.get(id=pk)
+            user=User.objects.get(id=driver.user_id)
+            log=request.data['log']
+            alt=request.data['alt']
+            point=Point(alt=alt,log=log)
+            nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
+            if nbrofPoint==0:
+                point.save()
+            point=Point.objects.get(alt=alt,log=log)
+            user.point_actuelle=point
+        
+            user.save()
+            #serializer = DriverSerializer(driver,many=False)
+            return Response({"id":driver.id , 
+                            "username":  driver.user.username,
+                            "first_name": driver.user.first_name,
+                            "last_name":  driver.user.last_name,
+                            #"email":      driver.user.email,
+                            "typeCompte": driver.user.typeCompte,
+                            "firebaseID": driver.user.firebaseID,
+                             "log":driver.user.point_actuelle.log,
+                             "alt":driver.user.point_actuelle.alt,
+                            })
+    except Driver.DoesNotExist as err:        
+        return Response({'err':' {}'.format(err)})
+
+@api_view(['PUT'])
+def updatePlacemntClient(request):
+    
+    try:
+            pk=request.data['id']
+            client = Client.objects.get(id=pk)
+            user=User.objects.get(id=client.user_id)
+            log=request.data['log']
+            alt=request.data['alt']
+            point=Point(alt=alt,log=log)
+            nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
+            if nbrofPoint==0:
+                point.save()
+            point=Point.objects.get(alt=alt,log=log)
+            user.point_actuelle=point
+        
+            user.save()
+            #serializer = DriverSerializer(driver,many=False)
+            return Response({
+                            "id":client.id , 
+                            "username": client.user.username,
+                            "first_name": client.user.first_name,
+                            "last_name": client.user.last_name,
+                            #"email": client.user.email,
+                            "typeCompte": client.user.typeCompte,
+                            "firebaseID": client.user.firebaseID,
+                            "typeclient": client.typeclient,
+                            "log":client.user.point_actuelle.log,
+                            "alt":client.user.point_actuelle.alt,
+                            })
+    except Client.DoesNotExist as err:        
+        return Response({'err':' {}'.format(err)})
