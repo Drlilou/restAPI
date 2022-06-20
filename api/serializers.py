@@ -9,6 +9,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields='__all__'
+    def create(self, validated_data):
+        user_data = validated_data.pop('point_actuelle')
+        user_instance = User.objects.create(
+            alt=user_data['alt'],log=user_data['log'])
+        user_instance.save()
+        
+        staff_instance = Point.objects.create(
+            **validated_data, point_actuelle=user_instance)
+        staff_instance.save()
+        return staff_instance
 
 class ClientSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)

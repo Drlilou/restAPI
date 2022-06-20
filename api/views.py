@@ -257,10 +257,12 @@ def getNearsetDriver(request,nbr=20):
     user=User.objects.get(id=client.user_id)
     if "nbr" in request.data:
         nbr=request.data['nbr']
+
     #point=Point.objects.get(la=user.point_actuelle)
     #The location of your user.
-    lat, lng = user.point_actuelle.alt,user.point_actuelle.log,
-
+    lat, lng =request.data['alt_dep'],request.data['log_arr'] #user.point_actuelle.alt,user.point_actuelle.log,
+    lat=float(lat)
+    lng=float(lng)
     min_lat = lat - 1 # You have to calculate this offsets based on the user location.
     max_lat = lat + 1 # Because the distance of one degree varies over the planet.
     min_log = lng - 1
@@ -268,19 +270,25 @@ def getNearsetDriver(request,nbr=20):
     users = User.objects.filter(is_connected=1,typeCompte="driver",point_actuelle__alt__gt=min_lat, point_actuelle__alt__lt=max_lat, point_actuelle__log__gt=min_log, point_actuelle__log__lt=max_log)
     results = []
     #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
+    #print(users.query)
     from geopy import distance  
     results = []
     for user in users:
         d = distance.distance((lat, lng), (user.point_actuelle.alt, user.point_actuelle.log))
-        results.append( {'distance':d, 'user':user })
+        results.append( {'distance':d, 'user':user.id })
         results = sorted(results, key=lambda k: k['distance'])
     results = results[:nbr]
-    print(len(results),",,,,,,,,,,,,")
+    print(results)
     results=[r['user'] for r in results]
     #drivers=[Driver.objects.get()]
-    users=UserSerializer(results,many=True)
-    driver=Driver.objects.get(user_id=results[-1].id)
+    #users=UserSerializer(results,many=True)
+    if len(results)==0:
+        return Response({"no driver":"no driver availbe"})
+    #driver=Driver.objects.filter(user_id__in=results)
+    driver=Driver.objects.get(user_id=results[0])
+    
     #return Response({"dirver":driver.id})
     #driver=Driver.objects.get(user_id=1)
-    #driver=DriverSerializer(driver,many=False)
+    #driver=DriverSerializer(driver,many=True)
+    #return Response(driver.data)
     return Response(driverTodict(driver))
