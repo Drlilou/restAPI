@@ -51,19 +51,18 @@ class CustomAuthToken(ObtainAuthToken):
                              
                             }) 
         #to remove
-        if 'alt' not in request.data or 'log' not in request.data:
-             return Response({"error":"activate GPS ( alt and log are  not definned)"
-                             
-                            }) 
+        #if 'alt' not in request.data or 'log' not in request.data:
+        #     return Response({"error":"activate GPS ( alt and log are  not definned)"
+         #                    }) 
        
-        alt=request.data['alt']
-        log=request.data['log']
-        point=Point(alt=alt,log=log)
-        nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
-        if nbrofPoint==0:
-            point.save()
-        point=Point.objects.get(alt=alt,log=log)
-        user.point_actuelle=point
+        #alt=request.data['alt']
+        #log=request.data['log']
+        #point=Point(alt=alt,log=log)
+        #nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
+        #if nbrofPoint==0:
+        #    point.save()
+        #point=Point.objects.get(alt=alt,log=log)
+        #user.point_actuelle=point
         user.firebaseID=request.data['firebaseID']
         user.is_connected=True
         user.save()
