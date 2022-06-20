@@ -263,10 +263,11 @@ def getNearsetDriver(request,nbr=20):
     lat, lng =request.data['alt_dep'],request.data['log_arr'] #user.point_actuelle.alt,user.point_actuelle.log,
     lat=float(lat)
     lng=float(lng)
-    min_lat = lat - 1 # You have to calculate this offsets based on the user location.
-    max_lat = lat + 1 # Because the distance of one degree varies over the planet.
-    min_log = lng - 1
-    max_log = lng + 1    
+    distanceVoulu=0.5
+    min_lat = lat - distanceVoulu # You have to calculate this offsets based on the user location.
+    max_lat = lat + distanceVoulu # Because the distance of one degree varies over the planet.
+    min_log = lng - distanceVoulu
+    max_log = lng + distanceVoulu    
     users = User.objects.filter(is_connected=1,typeCompte="driver",point_actuelle__alt__gt=min_lat, point_actuelle__alt__lt=max_lat, point_actuelle__log__gt=min_log, point_actuelle__log__lt=max_log)
     results = []
     #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
@@ -292,3 +293,39 @@ def getNearsetDriver(request,nbr=20):
     #driver=DriverSerializer(driver,many=True)
     #return Response(driver.data)
     return Response(driverTodict(driver))
+#---------------------------------
+@api_view(['GET'])
+def getCategory(request):
+    categories=Category.objects.all()
+    serializer=CategorySerializer(categories,many=True)
+    return Response(serializer.data)
+
+#-----------------------------------
+@api_view(['GET'])
+def getVoiture(request):
+    #category=request.data['category']
+    driver=request.data['driver']
+
+    voitures=Voiture.objects.filter(id_driver=driver)
+    serializer=VoitureSerializer(voitures,many=True)
+    return Response(serializer.data)
+@api_view(['POST'])
+def addVoiture(request):
+    #category=request.data['category']
+    matrciule=request.data['matrciule']
+    category=request.data['category']
+    id_driver=request.data['driver']
+    try:
+        category=Category.objects.get(id=category)
+    except Category.DoesNotExist as e:
+        return Response({"err":"category nexit pas "})
+    try:
+        id_driver=Driver.objects.get(id=id_driver)
+    except Driver.DoesNotExist as e:
+        return Response({"err":"Driver nexit pas "})
+    
+    voiture=Voiture(matrciule=matrciule,id_cat=category,id_driver=id_driver)
+    voiture.save()
+    #voitures=Voiture.objects.filter(id_driver=driver)
+    serializer=VoitureSerializer(voiture,many=False)
+    return Response(serializer.data)

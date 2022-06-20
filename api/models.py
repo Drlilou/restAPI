@@ -132,7 +132,7 @@ class Voiture(models.Model):
     id_cat = models.ForeignKey(Category, models.DO_NOTHING, db_column='id_cat', blank=True, null=True)
     id_driver = models.ForeignKey(Driver, models.DO_NOTHING, db_column='id_driver', blank=True, null=True)
     id_model = models.ForeignKey(Model, models.DO_NOTHING, db_column='id_model', blank=True, null=True)
-
+    #occupe=models.BooleanField(default=False)
     class Meta:
         managed = managed
         db_table = 'voiture'

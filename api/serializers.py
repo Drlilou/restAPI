@@ -5,20 +5,12 @@ from .models import *
 
 # signup login logout
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields='__all__'
-    def create(self, validated_data):
-        user_data = validated_data.pop('point_actuelle')
-        user_instance = User.objects.create(
-            alt=user_data['alt'],log=user_data['log'])
-        user_instance.save()
-        
-        staff_instance = Point.objects.create(
-            **validated_data, point_actuelle=user_instance)
-        staff_instance.save()
-        return staff_instance
+
 
 class ClientSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
@@ -147,3 +139,13 @@ def clientTodict(client):
                             "log":client.user.point_actuelle.log,
                             "alt":client.user.point_actuelle.alt,
                             }
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Category
+        fields='__all__'
+
+class VoitureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Voiture
+        fields='__all__'

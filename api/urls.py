@@ -21,7 +21,15 @@ urlpatterns = [
     path('drivers/'               ,views.getDrivers),
     path('drivers/<pk>/'          ,views.getDriver),
     path('drivers/<pk>/activate'  ,views.activateDriver),
-    path('drivers/updatePlamcent' ,views.updatePlacemntDriver)
+    path('drivers/updatePlamcent' ,views.updatePlacemntDriver),
+    path('drivers/voitures'       ,views.getVoiture),
+    path('drivers/addvoitures'    ,views.addVoiture),
+    #path('drivers/voituresBycategory'       ,views.getVoiture),
+
+    #categories
+    path('category/'                ,views.getCategory),
+    #voitres
+
 ]   
 
 #real time notifcations 
