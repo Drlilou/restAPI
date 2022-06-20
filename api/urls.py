@@ -24,7 +24,7 @@ urlpatterns = [
     path('drivers/updatePlamcent' ,views.updatePlacemntDriver),
     path('drivers/voitures'       ,views.getVoiture),
     path('drivers/addvoitures'    ,views.addVoiture),
-    #path('drivers/voituresBycategory'       ,views.getVoiture),
+    path('drivers/chooseVoiture'  ,views.chooseVoiture),
 
     #categories
     path('category/'                ,views.getCategory),

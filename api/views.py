@@ -50,13 +50,14 @@ class CustomAuthToken(ObtainAuthToken):
              return Response({"error":"firebaseID is not definned"
                              
                             }) 
-        if 'alt' not in request.data or 'long' not in request.data:
+        #to remove
+        if 'alt' not in request.data or 'log' not in request.data:
              return Response({"error":"activate GPS ( alt and log are  not definned)"
                              
                             }) 
        
         alt=request.data['alt']
-        log=request.data['long']
+        log=request.data['log']
         point=Point(alt=alt,log=log)
         nbrofPoint=Point.objects.filter(alt=alt,log=log).count()
         if nbrofPoint==0:
@@ -252,9 +253,12 @@ def updatePlacemntClient(request):
 
 @api_view(['GET'])
 def getNearsetDriver(request,nbr=20):
-    pk=request.data['id']
-    client = Client.objects.get(id=pk)
-    user=User.objects.get(id=client.user_id)
+    #pk=request.data['id']
+    #client = Client.objects.get(id=pk)
+    #user=User.objects.get(id=client.user_id)
+    #if 'category' not in request.data:
+    #    return Response({"category":"category is missing"})
+    category=request.data['category']
     if "nbr" in request.data:
         nbr=request.data['nbr']
 
@@ -263,36 +267,59 @@ def getNearsetDriver(request,nbr=20):
     lat, lng =request.data['alt_dep'],request.data['log_arr'] #user.point_actuelle.alt,user.point_actuelle.log,
     lat=float(lat)
     lng=float(lng)
+
     distanceVoulu=0.5
+    if "rayon" in request.data:
+        distanceVoulu=float(request.data['rayon'])//111
     min_lat = lat - distanceVoulu # You have to calculate this offsets based on the user location.
     max_lat = lat + distanceVoulu # Because the distance of one degree varies over the planet.
     min_log = lng - distanceVoulu
     max_log = lng + distanceVoulu    
-    users = User.objects.filter(is_connected=1,typeCompte="driver",point_actuelle__alt__gt=min_lat, point_actuelle__alt__lt=max_lat, point_actuelle__log__gt=min_log, point_actuelle__log__lt=max_log)
+    voitures = Voiture.objects.filter(
+            occupe=True,
+            id_cat=Category.objects.get(id=category),
+            id_driver__user__is_connected=1,
+            id_driver__user__typeCompte="driver",
+            id_driver__user__point_actuelle__alt__gt=min_lat,
+            id_driver__user__point_actuelle__alt__lt=max_lat, 
+            id_driver__user__point_actuelle__log__gt=min_log, 
+            id_driver__user__point_actuelle__log__lt=max_log,
+    )
+    #print(voitures.query)
     results = []
     #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
     #print(users.query)
     from geopy import distance  
     results = []
-    for user in users:
-        d = distance.distance((lat, lng), (user.point_actuelle.alt, user.point_actuelle.log))
-        results.append( {'distance':d, 'user':user.id })
+    for voiture in voitures:
+        d = distance.distance((lat, lng), (voiture.id_driver.user.point_actuelle.alt, voiture.id_driver.user.point_actuelle.log))
+        results.append( {'distance':d, 'voiture':voiture.id })
         results = sorted(results, key=lambda k: k['distance'])
     results = results[:nbr]
     print(results)
-    results=[r['user'] for r in results]
+    results=[r['voiture'] for r in results]
     #drivers=[Driver.objects.get()]
     #users=UserSerializer(results,many=True)
     if len(results)==0:
-        return Response({"no driver":"no driver availbe"})
+        return Response({"no voiture":"no voiture availbe"})
     #driver=Driver.objects.filter(user_id__in=results)
-    driver=Driver.objects.get(user_id=results[0])
+    voiture=Voiture.objects.get(id=results[0])
     
     #return Response({"dirver":driver.id})
-    #driver=Driver.objects.get(user_id=1)
+    #driver=Driver.objects.get(id=voiture.id_driver)
     #driver=DriverSerializer(driver,many=True)
     #return Response(driver.data)
-    return Response(driverTodict(driver))
+
+    dictOutput=driverTodict(voiture.id_driver)
+    dictOutput['id_voiture']=voiture.id
+    try:
+        dictOutput['marque']=voiture.id_model.model_name+"( {})".format(voiture.id_model.id_marque.marque_name)
+    except :
+         dictOutput['marque']="marque n'est pas defini encore"
+    dictOutput['category']=voiture.id_cat.cat_name
+
+    
+    return Response(dictOutput)
 #---------------------------------
 @api_view(['GET'])
 def getCategory(request):
@@ -309,6 +336,33 @@ def getVoiture(request):
     voitures=Voiture.objects.filter(id_driver=driver)
     serializer=VoitureSerializer(voitures,many=True)
     return Response(serializer.data)
+@api_view(['PUT'])
+def chooseVoiture(request):
+    #category=request.data['category']
+    driver=request.data['driver']
+    try:
+        driver=Driver.objects.get(id=driver)
+
+    except Driver.DoesNotExist as e:
+        return Response({"err":"driver donet exist"})
+
+    
+    voiture=request.data['voiture']
+    try:
+    
+        Voiture.objects.get(id=voiture,id_driver=driver)
+    except Voiture.DoesNotExist as e:
+
+        return Response({"err":"driver donet own this car or car donest exist"})
+    voitures=Voiture.objects.filter(id_driver=driver).update(occupe=False)
+
+    Voiture.objects.filter(id=voiture,id_driver=driver).update(occupe=True)
+    voiture = Voiture.objects.get(id=voiture,id_driver=driver)
+    serializer=VoitureSerializer(voiture,many=False)
+    return Response(serializer.data)
+
+
+
 @api_view(['POST'])
 def addVoiture(request):
     #category=request.data['category']
