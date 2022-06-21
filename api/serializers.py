@@ -143,10 +143,10 @@ def driverTodict(driver):
                             
     }
 def clientTodict(client):
-    return {                "id":client.id , 
-                            "username": client.user.username,
+    return {                "id":         client.id , 
+                            "username":   client.user.username,
                             "first_name": client.user.first_name,
-                            "last_name": client.user.last_name,
+                            "last_name":  client.user.last_name,
                             #"email": client.user.email,
                             "typeCompte": client.user.typeCompte,
                             "firebaseID": client.user.firebaseID,

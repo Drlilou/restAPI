@@ -223,8 +223,9 @@ def updatePlacemntDriver(request):
             user.point_actuelle=point
         
             user.save()
+            driver=Driver.objects.get(user_id=user.id)
             #serializer = DriverSerializer(driver,many=False)
-            return Response(clientTodict(client))
+            return Response(driverTodict(driver))
     except Driver.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
@@ -233,6 +234,7 @@ def updatePlacemntClient(request):
     
     try:
             pk=request.data['id']
+
             client = Client.objects.get(id=pk)
             user=User.objects.get(id=client.user_id)
             log=request.data['log']
@@ -243,8 +245,9 @@ def updatePlacemntClient(request):
                 point.save()
             point=Point.objects.get(alt=alt,log=log)
             user.point_actuelle=point
-        
+            
             user.save()
+            client=Client.objects.get(user_id=user.id)
             #serializer = DriverSerializer(driver,many=False)
             return Response(clientTodict(client))
     except Client.DoesNotExist as err:        
