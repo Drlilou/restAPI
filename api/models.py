@@ -128,7 +128,7 @@ class Tracking(models.Model):
 
 
 class Voiture(models.Model):
-    matrciule = models.CharField(max_length=100, blank=True, null=True)
+    matrciule = models.CharField(max_length=100, blank=True, null=True,unique=True)
     id_cat = models.ForeignKey(Category, models.DO_NOTHING, db_column='id_cat', blank=True, null=True)
     id_driver = models.ForeignKey(Driver, models.DO_NOTHING, db_column='id_driver', blank=True, null=True)
     id_model = models.ForeignKey(Model, models.DO_NOTHING, db_column='id_model', blank=True, null=True)
