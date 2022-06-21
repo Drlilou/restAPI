@@ -204,7 +204,15 @@ def getDriver(request,pk):
     serializer = DriverSerializer(driver,many=False)
     return Response(driverTodict(driver))
 
+#-----------------------------------
+@api_view(['GET'])
+def getVoiture(request,driver):
+    #category=request.data['category']
+    #driver=request.data['driver']
 
+    voitures=Voiture.objects.filter(id_driver=driver)
+    serializer=VoitureSerializer(voitures,many=True)
+    return Response(serializer.data)
 #--------------------------------------------------
 @api_view(['POST'])
 def updatePlacemntDriver(request):
@@ -329,15 +337,7 @@ def getCategory(request):
     serializer=CategorySerializer(categories,many=True)
     return Response(serializer.data)
 
-#-----------------------------------
-@api_view(['GET'])
-def getVoiture(request):
-    #category=request.data['category']
-    driver=request.data['driver']
 
-    voitures=Voiture.objects.filter(id_driver=driver)
-    serializer=VoitureSerializer(voitures,many=True)
-    return Response(serializer.data)
 @api_view(['POST'])
 def chooseVoiture(request):
     #category=request.data['category']

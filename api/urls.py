@@ -24,7 +24,7 @@ urlpatterns = [
     path('drivers/<pk>/'          ,views.getDriver),
     path('drivers/<pk>/activate'  ,views.activateDriver),
     path('drivers/updatePlamcent' ,views.updatePlacemntDriver),
-    path('drivers/voitures'       ,views.getVoiture),
+    path('drivers/voitures/<driver>/'       ,views.getVoiture),
     path('drivers/addvoitures'    ,views.addVoiture),
     path('drivers/chooseVoiture'  ,views.chooseVoiture),
 
