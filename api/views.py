@@ -177,7 +177,7 @@ def getClients(request):
     return Response(serializer.data)
  
 
-@api_view(['PUT'])
+@api_view(['POST'])
 def activateDriver(request,pk):
     
     try:
@@ -206,7 +206,7 @@ def getDriver(request,pk):
 
 
 #--------------------------------------------------
-@api_view(['PUT'])
+@api_view(['POST'])
 def updatePlacemntDriver(request):
     
     try:
@@ -228,7 +228,7 @@ def updatePlacemntDriver(request):
     except Driver.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
-@api_view(['PUT'])
+@api_view(['POST'])
 def updatePlacemntClient(request):
     
     try:
@@ -335,7 +335,7 @@ def getVoiture(request):
     voitures=Voiture.objects.filter(id_driver=driver)
     serializer=VoitureSerializer(voitures,many=True)
     return Response(serializer.data)
-@api_view(['PUT'])
+@api_view(['POST'])
 def chooseVoiture(request):
     #category=request.data['category']
     driver=request.data['driver']
