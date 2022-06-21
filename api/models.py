@@ -68,13 +68,13 @@ class Category(models.Model):
 
 
 class Coursa(models.Model):
-    date_dapart = models.DateField(blank=True, null=True)
-    date_arrive = models.DateField(blank=True, null=True)
-    arrive = models.ForeignKey('Point', models.DO_NOTHING, db_column='arrive',related_name='arrive', blank=True, null=True)
-    client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client', blank=True, null=True)
-    depart = models.ForeignKey('Point', models.DO_NOTHING, db_column='depart',related_name='depart', blank=True, null=True)
-    voiture = models.ForeignKey('Voiture', models.DO_NOTHING, db_column='voiture', blank=True, null=True)
-
+    date_dapart    = models.DateField(blank=True, null=True)
+    date_arrive    = models.DateField(blank=True, null=True)
+    arrive         = models.ForeignKey('Point', models.DO_NOTHING, db_column='arrive',related_name='arrive', blank=True, null=True)
+    client         = models.ForeignKey(Client, models.DO_NOTHING, db_column='client', blank=True, null=True)
+    depart         = models.ForeignKey('Point', models.DO_NOTHING, db_column='depart',related_name='depart', blank=True, null=True)
+    voiture        = models.ForeignKey('Voiture', models.DO_NOTHING, db_column='voiture', blank=True, null=True)
+    
     class Meta:
         managed = managed
         db_table = 'coursa'

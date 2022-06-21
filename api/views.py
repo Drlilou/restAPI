@@ -263,7 +263,7 @@ def getNearsetDriver(request,nbr=20):
 
     #point=Point.objects.get(la=user.point_actuelle)
     #The location of your user.
-    lat, lng =request.data['alt_dep'],request.data['log_arr'] #user.point_actuelle.alt,user.point_actuelle.log,
+    lat, lng =request.data['alt_dep'],request.data['log_dep'] #user.point_actuelle.alt,user.point_actuelle.log,
     lat=float(lat)
     lng=float(lng)
 
