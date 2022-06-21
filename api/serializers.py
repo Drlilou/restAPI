@@ -112,6 +112,21 @@ class DriverSignupSerializer(serializers.ModelSerializer):
         Driver.objects.create(user=user)
         
         return user
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Category
+        fields='__all__'
+
+class VoitureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Voiture
+        fields='__all__'
+
+class CoursaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Coursa
+        fields='__all__'
+
 
 def driversTodict(drivers):
     return set([driverTodict(driver) for driver in drivers])
@@ -123,8 +138,8 @@ def driverTodict(driver):
                             #"email":      driver.user.email,
                             "typeCompte": driver.user.typeCompte,
                             "firebaseID": driver.user.firebaseID,
-                             "log":driver.user.point_actuelle.log,
-                             "alt":driver.user.point_actuelle.alt,
+                             #"log":driver.user.point_actuelle.log,
+                             #"alt":driver.user.point_actuelle.alt,
                             
     }
 def clientTodict(client):
@@ -136,16 +151,20 @@ def clientTodict(client):
                             "typeCompte": client.user.typeCompte,
                             "firebaseID": client.user.firebaseID,
                             "typeclient": client.typeclient,
-                            "log":client.user.point_actuelle.log,
-                            "alt":client.user.point_actuelle.alt,
-                            }
+                            #"log":client.user.point_actuelle.log,
+                            #"alt":client.user.point_actuelle.alt,
+            }
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Category
-        fields='__all__'
 
-class VoitureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Voiture
-        fields='__all__'
+def coursaCreationTodict(coursa,finished=False):
+    coursaSeriliezd ={                "id":coursa.id , 
+                            "date_dapart": coursa.date_dapart,
+                            "depart": (coursa.depart.alt,coursa.depart.log),
+                            "arrive": (coursa.arrive.alt,coursa.arrive.log),
+                            "cheufeur":coursa.voiture.id_driver.user.first_name+" "+  coursa.voiture.id_driver.user.last_name
+
+                        }
+    if finished:
+        coursaSeriliezd['date_arrive']=coursa.date_arrive
+    return coursaSeriliezd
+

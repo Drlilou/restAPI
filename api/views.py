@@ -382,3 +382,51 @@ def addVoiture(request):
     #voitures=Voiture.objects.filter(id_driver=driver)
     serializer=VoitureSerializer(voiture,many=False)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def createCoursa(request):
+    client=request.data['client']
+    voiture=request.data['voiture']
+    alt_dep=request.data['alt_dep']
+    log_dep=request.data['log_dep']
+
+    alt_arr=request.data['alt_arr']
+    log_arr=request.data['log_arr']
+    try:
+        client=Client.objects.get(id=client)
+    except Client.DoesNotExist as e:
+        return Response({"err":"Client n'exit pas "})
+    
+    try:
+        voiture=Voiture.objects.get(id=voiture)
+    except Voiture.DoesNotExist as e:
+        return Response({"err":"Voiture nexit pas "})
+    
+    point_dep=Point(alt=alt_dep,log=log_dep)
+    nbrofPoint=Point.objects.filter(alt=alt_dep,log=log_dep).count()
+    if nbrofPoint==0:
+        point_dep.save()
+    depart=Point.objects.get(alt=alt_dep,log=log_dep)
+
+    point_arr=Point(alt=alt_arr,log=log_arr)
+    nbrofPoint=Point.objects.filter(alt=alt_arr,log=log_arr).count()
+    if nbrofPoint==0:
+        point_arr.save()
+    arrive=Point.objects.get(alt=alt_arr,log=log_arr)
+
+    coursa=Coursa(client=client,voiture=voiture,depart=depart,arrive=arrive)
+    coursa.save()
+  
+    serializer=CoursaSerializer(coursa,many=False)
+    return Response(coursaCreationTodict(coursa))
+@api_view(['POST'])
+def endCoursa(request):
+    coursa=request.data['id']
+    try :
+        coursa=Coursa.objects.get(id=coursa)
+    except Coursa.DoesNotExist as e:
+        return Response({"err":"Coursa nexit pas "})
+    import datetime
+    coursa.date_arrive=datetime.datetime.now()
+    coursa.save()
+    return Response(coursaCreationTodict(coursa,finished=True))
