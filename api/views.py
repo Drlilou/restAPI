@@ -327,6 +327,8 @@ def getNearsetDriver(request,nbr=20):
     except :
          dictOutput['marque']="marque n'est pas defini encore"
     dictOutput['category']=voiture.id_cat.cat_name
+    dictOutput['alt']=voiture.id_driver.user.point_actuelle.alt
+    dictOutput['log']=voiture.id_driver.user.point_actuelle.log
 
     
     return Response(dictOutput)
