@@ -261,7 +261,7 @@ def updatePlacemntClient(request):
     except Client.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
-@api_view(['GET'])
+@api_view(['GET',"POST"])
 def getNearsetDriver(request,nbr=20):
     #pk=request.data['id']
     #client = Client.objects.get(id=pk)
