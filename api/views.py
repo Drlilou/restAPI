@@ -205,7 +205,7 @@ def getDriver(request,pk):
     return Response(driverTodict(driver))
 
 #-----------------------------------
-@api_view(['POST'])
+@api_view(['POST','GET'])
 def getVoiture(request,driver):
     #category=request.data['category']
     #driver=request.data['driver']
