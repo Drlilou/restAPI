@@ -205,7 +205,7 @@ def getDriver(request,pk):
     return Response(driverTodict(driver))
 
 #-----------------------------------
-@api_view(['POST','GET'])
+@api_view(['GET'])
 def getVoiture(request,driver):
     #category=request.data['category']
     #driver=request.data['driver']
@@ -261,7 +261,7 @@ def updatePlacemntClient(request):
     except Client.DoesNotExist as err:        
         return Response({'err':' {}'.format(err)})
 
-@api_view(['GET',"POST"])
+@api_view(['GET','POST'])
 def getNearsetDriver(request,nbr=20):
     #pk=request.data['id']
     #client = Client.objects.get(id=pk)
