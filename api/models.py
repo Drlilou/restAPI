@@ -119,7 +119,7 @@ class Tracking(models.Model):
     coursa = models.OneToOneField(Coursa, models.DO_NOTHING, db_column='coursa', primary_key=True)
     point = models.ForeignKey(Point, models.DO_NOTHING, null=True,db_column='point')
     #bsh na3Rf wa9t li kan fiiha 
-    time=models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    time=models.DateTimeField( editable=False,auto_now_add=True, null=True, blank=True)
     class Meta:
         managed = managed
         db_table = 'tracking'
