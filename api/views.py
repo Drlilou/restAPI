@@ -435,3 +435,6 @@ def endCoursa(request):
     coursa.date_arrive=datetime.datetime.now()
     coursa.save()
     return Response(coursaCreationTodict(coursa,finished=True))
+
+#notification : 
+# pip install pyfcm==0.0.4
