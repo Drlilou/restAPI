@@ -436,5 +436,24 @@ def endCoursa(request):
     coursa.save()
     return Response(coursaCreationTodict(coursa,finished=True))
 
-#notification : 
-# pip install pyfcm==0.0.4
+import requests
+def  OneToOneMessageAPIView(title,body,school,receiver_token):
+    payload = {
+    "notification" : {
+        "title" : str(title),
+        "body" : str(body),
+        "priority" : "high",
+        'content_available':"true"
+        },
+    "to" : receiver_token,
+}
+
+
+    headers = {"Authorization":"key="+str(sender_token),
+           "Content-Type":"application/json",
+           }
+
+    link = "https://fcm.googleapis.com/fcm/send"
+    response = requests.post(link,data=json.dumps(payload),headers=headers)
+    print('{} response code message'.format(response.status_code))
+    return response.status_code

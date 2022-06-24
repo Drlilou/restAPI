@@ -1,5 +1,7 @@
 from django.urls import path,include
 from . import views
+from . import notification_sender
+
 
 from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
@@ -30,7 +32,8 @@ urlpatterns = [
 
     #categories
     path('category/'                ,views.getCategory),
-    #voitres
+    #notifcations
+    path('notification/',            notification_sender.notifyDriver.as_view()),
 
 ]   
 
