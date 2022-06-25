@@ -37,7 +37,7 @@ def notification(request):
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     print(response.text)
-    return HttpResponse("True")
+    return Response({"no prblm":"True"})
 
 
 
