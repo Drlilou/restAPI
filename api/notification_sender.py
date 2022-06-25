@@ -31,8 +31,7 @@ def notification(request):
         'Content-Type': 'application/json',
         'Authorization': key
         }
-    data = {
-        "notification": {"title": title, "body": message},
+    data =  {        "notification": {"title": title, "body": message},
         "to": "/topics/" + recipient,
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
