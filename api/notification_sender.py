@@ -9,55 +9,32 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 import json
 
-
-serverToken = "AAAAvaxaZBI:APA91bFIqn723wmyXXBfbRHQ089WfOH1kCtHiwb58XZ0b1maZC42aG61cb8YFv2kPZ_TVQ7VAfqYmhqyZ7kNOLap_jYCHMX5M1mdMosT9-w0zTjQKLd6y8IZ98fMLQmKTCmWcb_fKvlo"
-
-class notifyDriver(APIView):
-    def post(self, request):
-        #data = json.loads(json.dumps(request.data))
-        data={}
-        data["client"] = Client.objects.get(id=request.data["client"])
-        data["driver"] = Driver.objects.get(id=request.data["driver"])#firebase ID
-        data["coursa"] = Coursa.objects.get(id=request.data["coursa"])
-        #message=coursa
-        response = {}
-
-        if SendToDriver.send_message_to_driver(data["client"].id,
-        			        data["driver"].user.firebaseID,
-                            str(data["coursa"])
-                      		):
-            response["success"] = True
-        else:
-            response["success"] = False
-
-        return JsonResponse(response)
+from django.http import HttpResponse
+import requests
 
 
-# /message/
-class SendToDriver(APIView):
-    @staticmethod
-    def send_message_to_driver(from_client, to_driver, message):
-        finalmsg = {
-            "to":  to_driver,
-            "data": {
-                "message": message,
-                "from_user": from_client,
-            }
+from django.views.decorators.csrf import csrf_exempt
+key1="key=AAAAvaxaZBI:APA91bFIqn723wmyXXBfbRHQ089WfOH1kCtHiwb58XZ0b1maZC42aG61cb8YFv2kPZ_TVQ7VAfqYmhqyZ7kNOLap_jYCHMX5M1mdMosT9-w0zTjQKLd6y8IZ98fMLQmKTCmWcb_fKvlo"
+key='key=AAAAlQ1Lrfw:APA91bHvI2-qFZNCf-oFfeZgM0JUDxxbuykH_ffka9hPUE0xBpiza4uHF0LmItT_SfMZ1Zl5amGUfAXigaR_VcMsEArqpOwHNup4oRTQ24htJ_GWYH0OWZzFrH2lRY24mnQ-uiHgLyln'
+    
+@csrf_exempt
+def notification(request):
+    print(request.POST)
+    recipient =request.POST['firebaseID']#'Testing1'
+    title='notification'
+    message = 'corp de notification'
+    url = 'https://fcm.googleapis.com/fcm/send'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': key1
         }
+    data = {
+        "notification": {"title": title, "body": message},
+        "to": "/topics/" + recipient,
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    print(response.text)
+    return HttpResponse("True")
 
-        headers = {
-            "Authorization": "key=" + serverToken,
-            "Content-Type": "application/json",
-        }
 
-        fcm_response = requests.post("https://fcm.googleapis.com/fcm/send", json.dumps(finalmsg), headers=headers)
-        print(fcm_response) 
-        print("**************")
-        fcm_json_response = json.loads(fcm_response.content)
 
-        if fcm_json_response.has_key("error"):
-            return False
-        else:
-            return True
-
- 
