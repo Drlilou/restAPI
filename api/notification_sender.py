@@ -20,7 +20,9 @@ key ='key=AAAAlQ1Lrfw:APA91bHvI2-qFZNCf-oFfeZgM0JUDxxbuykH_ffka9hPUE0xBpiza4uHF0
 #@csrf_exempt
 def notification(request):
     print(request.POST)
+
     recipient =request.POST['firebaseID']#'Testing1'
+    return HttpResponse(recipient)
     title='notification'
     message = 'corp de notification'
     url = 'https://fcm.googleapis.com/fcm/send'
