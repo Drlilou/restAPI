@@ -29,7 +29,7 @@ def notification(request):
     url = 'https://fcm.googleapis.com/fcm/send'
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': key1
+        'Authorization': key
         }
     data = {
         "notification": {"title": title, "body": message},
@@ -37,7 +37,7 @@ def notification(request):
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     print(response.text)
-    return Response({"no prblm":"True"})
+    return Response({"no prblm":response.text})
 
 
 
