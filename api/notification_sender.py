@@ -33,7 +33,8 @@ def notification(request):
         'Authorization': key
         }
     data =  {        "notification": {"title": title, "body": message},
-        "to": "/topics/" + recipient,
+        "to": "eSk4WK2bPzI:APA91bE2umq01tmLT_Bt8fEuvtuGN8PqtS1jvvic9-Pq0pHGGfGU_cZI6PL3Fwph6jYK7SZPxbLYk08FPBJbDVrHS4YdTFl_Tf8tnJ-psax8radp6aMZPBo-kqOIzJLy68ll8tcnWEXq",# recipient,
+        # "to": "/topics/" + recipient,
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     print(response.text)
