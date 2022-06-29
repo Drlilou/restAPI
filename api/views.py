@@ -388,6 +388,7 @@ def addVoiture(request):
     #voitures=Voiture.objects.filter(id_driver=driver)
     serializer=VoitureSerializer(voiture,many=False)
     return Response(serializer.data)
+key ="key=AAAAvaxaZBI:APA91bFIqn723wmyXXBfbRHQ089WfOH1kCtHiwb58XZ0b1maZC42aG61cb8YFv2kPZ_TVQ7VAfqYmhqyZ7kNOLap_jYCHMX5M1mdMosT9-w0zTjQKLd6y8IZ98fMLQmKTCmWcb_fKvlo"
 
 @api_view(['POST'])
 def createCoursa(request):
@@ -422,9 +423,42 @@ def createCoursa(request):
 
     coursa=Coursa(client=client,voiture=voiture,depart=depart,arrive=arrive)
     coursa.save()
-  
+    
     serializer=CoursaSerializer(coursa,many=False)
+    notify(voiture)
     return Response(coursaCreationTodict(coursa))
+
+
+
+
+
+
+
+def notify(voiture):
+    driver=Driver.objects.get(id=voiture.id_driver)
+    user=User.objects.get(id=driver.user_id)
+    title='notification'
+    message = 'corp de notification'
+    url = 'https://fcm.googleapis.com/fcm/send'
+    
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': key
+        }
+    data =  {        "data": {"title": title, "message": message,"lat":36.216755,"lng":2.747962},
+        "to": + user.firebaseID,
+        #"to":"eSk4WK2bPzI:APA91bE2umq01tmLT_Bt8fEuvtuGN8PqtS1jvvic9-Pq0pHGGfGU_cZI6PL3Fwph6jYK7SZPxbLYk08FPBJbDVrHS4YdTFl_Tf8tnJ-psax8radp6aMZPBo-kqOIzJLy68ll8tcnWEXq",
+        #"to": "dBkxmIyzADk:APA91bGUl0aEdv2Jr83UbPQuNLPmbjlOKUcHxorX3_2Y_3sT3fdjnRIObOiuuQ3ZKOEiFrjYu_AI5Cj5wBJSUWc4rBn6U1h0D4ZuqVmcPU1Bgav02h39ii-9Seucl7F30dESiwnsX0M3"
+        # "to": "/topics/" + recipient,
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+
+
+
+
+
+
 @api_view(['POST'])
 def endCoursa(request):
     coursa=request.data['id']
@@ -436,4 +470,3 @@ def endCoursa(request):
     coursa.date_arrive=datetime.datetime.now()
     coursa.save()
     return Response(coursaCreationTodict(coursa,finished=True))
-

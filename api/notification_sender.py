@@ -33,8 +33,9 @@ def notification(request):
         'Authorization': key
         }
     data =  {        "data": {"title": title, "message": message,"lat":36.216755,"lng":2.747962},
+        "to": + recipient,
         #"to":"eSk4WK2bPzI:APA91bE2umq01tmLT_Bt8fEuvtuGN8PqtS1jvvic9-Pq0pHGGfGU_cZI6PL3Fwph6jYK7SZPxbLYk08FPBJbDVrHS4YdTFl_Tf8tnJ-psax8radp6aMZPBo-kqOIzJLy68ll8tcnWEXq",
-        "to": "dBkxmIyzADk:APA91bGUl0aEdv2Jr83UbPQuNLPmbjlOKUcHxorX3_2Y_3sT3fdjnRIObOiuuQ3ZKOEiFrjYu_AI5Cj5wBJSUWc4rBn6U1h0D4ZuqVmcPU1Bgav02h39ii-9Seucl7F30dESiwnsX0M3"
+        #"to": "dBkxmIyzADk:APA91bGUl0aEdv2Jr83UbPQuNLPmbjlOKUcHxorX3_2Y_3sT3fdjnRIObOiuuQ3ZKOEiFrjYu_AI5Cj5wBJSUWc4rBn6U1h0D4ZuqVmcPU1Bgav02h39ii-9Seucl7F30dESiwnsX0M3"
         # "to": "/topics/" + recipient,
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))

@@ -162,7 +162,7 @@ def coursaCreationTodict(coursa,finished=False):
                             "depart": (coursa.depart.alt,coursa.depart.log),
                             "arrive": (coursa.arrive.alt,coursa.arrive.log),
                             "cheufeur":coursa.voiture.id_driver.user.first_name+" "+  coursa.voiture.id_driver.user.last_name
-
+                            #"firebaseIDDriver":
                         }
     if finished:
         coursaSeriliezd['date_arrive']=coursa.date_arrive
