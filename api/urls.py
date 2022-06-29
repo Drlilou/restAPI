@@ -33,7 +33,7 @@ urlpatterns = [
     #categories
     path('category/'                ,views.getCategory),
     #notifcations
-    path('notification/',            notification_sender.notification),
+    #path('notification/',            notification_sender.notification),
 
 ]   
 

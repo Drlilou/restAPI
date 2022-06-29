@@ -426,7 +426,7 @@ def createCoursa(request):
     coursa.save()
     
     serializer=CoursaSerializer(coursa,many=False)
-    notify(voiture)
+    notify(voiture,point_dep.alt,point_dep.log)
     return Response(coursaCreationTodict(coursa))
 
 
@@ -435,7 +435,7 @@ def createCoursa(request):
 
 
 
-def notify(voiture):
+def notify(voiture,deprtlat,departlng):
     driver=Driver.objects.get(id=voiture.id_driver.id)
     user=User.objects.get(id=driver.user_id)
     title='notification'
@@ -446,7 +446,7 @@ def notify(voiture):
         'Content-Type': 'application/json',
         'Authorization': key
         }
-    data =  {        "data": {"title": title, "message": message,"lat":36.216755,"lng":2.747962},
+    data =  {        "data": {"title": title, "message": message,"lat":deprtlat,"lng":departlng},
         "to":  user.firebaseID,
         #"to":"eSk4WK2bPzI:APA91bE2umq01tmLT_Bt8fEuvtuGN8PqtS1jvvic9-Pq0pHGGfGU_cZI6PL3Fwph6jYK7SZPxbLYk08FPBJbDVrHS4YdTFl_Tf8tnJ-psax8radp6aMZPBo-kqOIzJLy68ll8tcnWEXq",
         #"to": "dBkxmIyzADk:APA91bGUl0aEdv2Jr83UbPQuNLPmbjlOKUcHxorX3_2Y_3sT3fdjnRIObOiuuQ3ZKOEiFrjYu_AI5Cj5wBJSUWc4rBn6U1h0D4ZuqVmcPU1Bgav02h39ii-9Seucl7F30dESiwnsX0M3"
