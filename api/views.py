@@ -23,7 +23,7 @@ class ClientSignupView(generics.GenericAPIView):
         user=serializer.save()
         client = Client.objects.get(user_id=user.pk)
         client.is_active=1
-        client.save()
+        #client.save()
         serializer=ClientSerializer(client,many=False)
         return Response(
             serializer.data
@@ -296,7 +296,7 @@ def getNearsetDriver(request,nbr=20):
     lat=float(lat)
     lng=float(lng)
 
-    distanceVoulu=0.5
+    distanceVoulu=10
     if "rayon" in request.data:
         distanceVoulu=float(request.data['rayon'])//111
     min_lat = lat - distanceVoulu # You have to calculate this offsets based on the user location.
