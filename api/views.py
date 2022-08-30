@@ -296,7 +296,7 @@ def getNearsetDriver(request,nbr=20):
     lat=float(lat)
     lng=float(lng)
 
-    distanceVoulu=10
+    distanceVoulu=10 #0.5
     if "rayon" in request.data:
         distanceVoulu=float(request.data['rayon'])//111
     min_lat = lat - distanceVoulu # You have to calculate this offsets based on the user location.
