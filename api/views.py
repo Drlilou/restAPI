@@ -75,9 +75,12 @@ class CustomAuthToken(ObtainAuthToken):
         #token, created=Token.objects.get_or_create(user=user)
         
         if user.typeCompte=='driver':
-            driver =Driver.objects.get(user_id=user.id)
-            #ser=    DriverSerializer(,many=False)
-            return Response(driverTodict(driver))    
+            if driver.is_active:
+                driver =Driver.objects.get(user_id=user.id)
+                #ser=    DriverSerializer(,many=False)
+                return Response(driverTodict(driver))    
+            else:
+                return {"error":"account of this driver is not activated yet"}
         else:
             client=Client.objects.get(user_id=user.id)
             #ser=    ClientSerializer(client,many=False)
