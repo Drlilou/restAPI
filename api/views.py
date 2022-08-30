@@ -222,8 +222,11 @@ def getDriver(request,pk):
 
         serializer = DriverSerializer(driver,many=False)
         data=driverTodict(driver)
-        #if driver.is_connected:
-        #    data['log']=driver.user.point_actuelle.log
+        try:
+            data['log']=driver.user.point_actuelle.log
+            data['alt']=driver.user.point_actuelle.alt
+        except :
+            print(1)
         return Response(data)
     except:
         return Response({"err":"driver n'exit pas "})
