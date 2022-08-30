@@ -40,7 +40,10 @@ class DriverSignupView(generics.GenericAPIView):
         #print(driver)
         #serializer=DriverSerializer(driver,many=False)
         return Response(
-            serializer.data
+            {"id":driver.id,
+            "tlf":driver.user.tlf, 
+            }
+            #serializer.data
             #'user':UserSerializer(user, context=self.get_serializer_context()).data,
             #'token':Token.objects.get(user=user).key,
             #'message':'account created successfully'
