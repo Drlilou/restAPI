@@ -48,10 +48,14 @@ class DriverSignupView(generics.GenericAPIView):
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer=self.serializer_class(data=request.data, context={'request':request})
-        
-        serializer.is_valid(raise_exception=True)
-
+        try:
+            serializer.is_valid(raise_exception=True)
+        except:
+            return Response({"err":"user (driver) is not active "})
         user=serializer.validated_data['user']
+        print(user.is_active)
+        #if user.is_active:
+        #    print("errrr")
         if 'firebaseID' not in request.data:
              return Response({"error":"firebaseID is not definned"
                              
@@ -73,14 +77,13 @@ class CustomAuthToken(ObtainAuthToken):
         user.is_connected=True
         user.save()
         #token, created=Token.objects.get_or_create(user=user)
-        
+
         if user.typeCompte=='driver':
-            if driver.is_active:
+            
                 driver =Driver.objects.get(user_id=user.id)
                 #ser=    DriverSerializer(,many=False)
                 return Response(driverTodict(driver))    
-            else:
-                return {"error":"account of this driver is not activated yet"}
+
         else:
             client=Client.objects.get(user_id=user.id)
             #ser=    ClientSerializer(client,many=False)
