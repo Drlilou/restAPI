@@ -22,6 +22,8 @@ class ClientSignupView(generics.GenericAPIView):
         )
         user=serializer.save()
         client = Client.objects.get(user_id=user.pk)
+        client.is_active=1
+        client.save()
         serializer=ClientSerializer(client,many=False)
         return Response(
             serializer.data
@@ -38,6 +40,7 @@ class DriverSignupView(generics.GenericAPIView):
         user=serializer.save()
         driver = Driver.objects.get(user_id=user.pk)
         #print(driver)
+        driver.save()
         #serializer=DriverSerializer(driver,many=False)
         return Response(
             {"id":driver.id,
