@@ -32,7 +32,7 @@ class User(AbstractUser):
 
 class Client(models.Model):
     user=models.OneToOneField(User, related_name='client', on_delete=models.CASCADE)
-    typeclient = models.CharField(max_length=200,default='sîmple')  # Field name made lowercase.
+    typeclient = models.CharField(max_length=200,default='simple')  # Field name made lowercase.
     #client_tlf = models.CharField(max_length=100, blank=True, null=True)
     class Meta:
         managed = managed

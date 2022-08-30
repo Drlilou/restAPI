@@ -16,6 +16,10 @@ class ClientSignupView(generics.GenericAPIView):
 
         serializer=self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if request.data['typeclient'] not in ['simple',"pro"]:
+            return Response(
+            {"error":"type is not recognized"}
+        )
         user=serializer.save()
         client = Client.objects.get(user_id=user.pk)
         serializer=ClientSerializer(client,many=False)
