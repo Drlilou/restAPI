@@ -139,8 +139,8 @@ def driverTodict(driver):
                             "typeCompte": driver.user.typeCompte,
                             "firebaseID": driver.user.firebaseID,
                             "acive":driver.user.is_active,
-                            # "log":driver.user.point_actuelle.log,
-                            # "alt":driver.user.point_actuelle.alt,
+                             "log":driver.user.point_actuelle.log,
+                             "alt":driver.user.point_actuelle.alt,
                             
     }
 def clientTodict(client):
