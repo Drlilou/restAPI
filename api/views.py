@@ -217,10 +217,13 @@ def getDrivers(request):
     return Response(serializer.data)
 @api_view(['GET'])
 def getDriver(request,pk):
-    driver = Driver.objects.get(id=pk)
+    try:
+        driver = Driver.objects.get(id=pk)
 
-    serializer = DriverSerializer(driver,many=False)
-    return Response(driverTodict(driver))
+        serializer = DriverSerializer(driver,many=False)
+        return Response(driverTodict(driver))
+    except:
+        return Response({"err":"driver n'exit pas "})
 
 #-----------------------------------
 @api_view(['GET','POST'])
