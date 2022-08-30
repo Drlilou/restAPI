@@ -55,7 +55,7 @@ class CustomAuthToken(ObtainAuthToken):
         user=serializer.validated_data['user']
         print(user.is_active)
         #if user.is_active:
-        #    print("errrr")
+        #    print("errrr")d
         if 'firebaseID' not in request.data:
              return Response({"error":"firebaseID is not definned"
                              
@@ -395,7 +395,10 @@ def addVoiture(request):
         return Response({"err":"Driver nexit pas "})
     
     voiture=Voiture(matrciule=matrciule,id_cat=category,id_driver=id_driver)
-    voiture.save()
+    try:
+        voiture.save()
+    except :
+        return Response({"matrciule":"matrciule deja exists"})
     #voitures=Voiture.objects.filter(id_driver=driver)
     serializer=VoitureSerializer(voiture,many=False)
     return Response(serializer.data)
