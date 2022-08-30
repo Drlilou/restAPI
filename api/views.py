@@ -226,7 +226,8 @@ def getDriver(request,pk):
             data['log']=driver.user.point_actuelle.log
             data['alt']=driver.user.point_actuelle.alt
         except :
-            print(1)
+            data['coordonne']="pas de coor"
+           
         return Response(data)
     except:
         return Response({"err":"driver n'exit pas "})
