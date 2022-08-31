@@ -325,7 +325,7 @@ def getNearsetDriver(request,nbr=20):
             id_driver__user__is_active=1,
     )
     #print(voitures.query)
-    #return Response({"querys":str(voitures.query)})
+    return Response({"querys":len(voitures)})
     results = []
     #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
     #print(users.query)
