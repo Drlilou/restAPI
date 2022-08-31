@@ -299,7 +299,7 @@ def getNearsetDriver(request,nbr=20):
     category=request.data['category']
     if "nbr" in request.data:
         nbr=request.data['nbr']
-    return Response(dict(request.data))
+
     #point=Point.objects.get(la=user.point_actuelle)
     #The location of your user.
     lat, lng =request.data['alt_dep'],request.data['log_dep'] #user.point_actuelle.alt,user.point_actuelle.log,
@@ -324,6 +324,7 @@ def getNearsetDriver(request,nbr=20):
             id_driver__user__point_actuelle__log__lt=max_log,
     )
     #print(voitures.query)
+    return Response("query":voitures.query)
     results = []
     #https://stackoverflow.com/questions/17903883/using-geopositionfield-to-find-closest-database-entries
     #print(users.query)
