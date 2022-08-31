@@ -322,6 +322,7 @@ def getNearsetDriver(request,nbr=20):
             id_driver__user__point_actuelle__alt__lt=max_lat, 
             id_driver__user__point_actuelle__log__gt=min_log, 
             id_driver__user__point_actuelle__log__lt=max_log,
+            id_driver__user__is_active=1,
     )
     #print(voitures.query)
     return Response("query":voitures.query)
