@@ -315,7 +315,7 @@ def getNearsetDriver(request,nbr=20):
     max_log = lng + distanceVoulu    
     voitures = Voiture.objects.filter(
             occupe=True,
-            id_cat=Category.objects.get(id=category),
+            #id_cat=Category.objects.get(id=category),
             id_driver__user__is_connected=1,
             id_driver__user__typeCompte="driver",
             id_driver__user__point_actuelle__alt__gt=min_lat,
